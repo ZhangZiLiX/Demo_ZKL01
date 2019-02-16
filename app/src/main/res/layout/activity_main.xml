@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.demo_zkl01.MainActivity"
+    >
+
+    //上方Fragment 的vp
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_btn_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linear_buttom_btn"
+        >
+
+    </android.support.v4.view.ViewPager>
+
+    //首页底部导航栏
+    <LinearLayout
+        android:id="@+id/linear_buttom_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:layout_alignParentBottom="true"
+        android:background="#b6b3b3"
+        >
+
+        <Button
+            android:id="@+id/btn_home"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="首页"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btn_quanzi"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="圈子"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btn_bycar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="购物车"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btn_zhangdan"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="账单"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/btn_me"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="我的"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
