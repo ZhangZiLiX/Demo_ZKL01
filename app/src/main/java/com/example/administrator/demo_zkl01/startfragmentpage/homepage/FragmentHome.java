@@ -289,7 +289,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
             //允许使用javascript
             webSettings.setJavaScriptEnabled(true);
             //设置可自由缩放网页
-
             mWebView.getSettings().setSupportZoom(true);
             mWebView.getSettings().setBuiltInZoomControls(true);
             // 如果页面中链接，如果希望点击链接继续在当前browser中响应，
