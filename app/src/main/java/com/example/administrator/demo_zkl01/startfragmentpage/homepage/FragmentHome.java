@@ -9,7 +9,9 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.example.administrator.demo_zkl01.startfragmentpage.homepage.adapter.S
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.bean.DaoSearch;
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.bean.DetailsBean;
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.bean.SearchBean;
+import com.example.administrator.demo_zkl01.utils.API;
 import com.example.administrator.demo_zkl01.view.IView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -265,8 +268,38 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
 
         //判断是否是商品详情类
         if (o instanceof DetailsBean) {
+            DetailsBean detailsBean = (DetailsBean) o;
+            DetailsBean.ResultBean detailsBeanResult = detailsBean.getResult();
+            String details = detailsBeanResult.getDetails();
+            //使用webview展示
+            //String detailsURL= "http://172.17.8.100/small/commodity/v1/findCommodityByKeyword?page=1&count=10&keyword="+commodityid;
+            //mWebView.loadUrl(details);
 
 
+            mWebView.setWebViewClient(new WebViewClient());
+            //使用简单的loadData()方法总会导致乱码，有可能是Android API的Bug
+            //webView.loadData(data, "text/html", "GBK");
+            mWebView.loadDataWithBaseURL(null, details, "text/html", "utf-8", null);
+
+
+            //加上下面这段代码可以使网页中的链接不以浏览器的方式打开
+            mWebView.setWebViewClient(new WebViewClient());
+            //得到webview设置
+            WebSettings webSettings = mWebView.getSettings();
+            //允许使用javascript
+            webSettings.setJavaScriptEnabled(true);
+            //设置可自由缩放网页
+            mWebView.getSettings().setSupportZoom(true);
+            mWebView.getSettings().setBuiltInZoomControls(true);
+            // 如果页面中链接，如果希望点击链接继续在当前browser中响应，
+            // 而不是新开Android的系统browser中响应该链接，必须覆盖webview的WebViewClient对象
+            mWebView.setWebViewClient(new WebViewClient() {
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
         }
     }
 
