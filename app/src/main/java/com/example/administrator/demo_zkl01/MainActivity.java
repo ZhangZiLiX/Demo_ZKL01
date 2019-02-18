@@ -14,6 +14,7 @@ import com.example.administrator.demo_zkl01.startfragmentpage.homepage.FragmentH
 import com.example.administrator.demo_zkl01.startfragmentpage.mepage.FragmentMe;
 import com.example.administrator.demo_zkl01.startfragmentpage.circlepage.FragmentCircle;
 import com.example.administrator.demo_zkl01.startfragmentpage.billpage.FragmentBill;
+import com.example.administrator.demo_zkl01.utils.BaseActionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActionBar {
 
     @BindView(R.id.main_btn_vp)
     ViewPager mainBtnVp;

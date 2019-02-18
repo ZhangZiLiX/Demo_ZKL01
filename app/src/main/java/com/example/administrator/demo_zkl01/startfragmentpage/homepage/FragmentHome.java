@@ -1,9 +1,12 @@
 package com.example.administrator.demo_zkl01.startfragmentpage.homepage;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +23,11 @@ import com.example.administrator.demo_zkl01.R;
 import com.example.administrator.demo_zkl01.application.MyApplication;
 import com.example.administrator.demo_zkl01.dao.DaoSearchDao;
 import com.example.administrator.demo_zkl01.presenter.Presenter;
+import com.example.administrator.demo_zkl01.startfragmentpage.homepage.adapter.DetailsAdapter;
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.adapter.SearchAdapter;
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.bean.DaoSearch;
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.bean.DetailsBean;
 import com.example.administrator.demo_zkl01.startfragmentpage.homepage.bean.SearchBean;
-import com.example.administrator.demo_zkl01.utils.API;
 import com.example.administrator.demo_zkl01.view.IView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -61,6 +65,38 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
     private DaoSearchDao daoSearchDao;
     private long insert;
     private WebView mWebView;
+    private ViewPager vp;
+
+    /**
+     * 详情轮播图
+     */
+    //定义一个表示
+    private int FLAG = 1001;
+    //创建Handler对象 进行发送
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == FLAG) {
+                //得到当前的vp展示的视图的下标
+                int item = vp.getCurrentItem();
+                //判断
+                if (item < imageList.size() - 1) {
+                    item++;
+                } else {
+                    item = 0;
+                }
+                //重新为vp设置要展示的视图的下标
+                vp.setCurrentItem(item);
+                //延迟发送
+                handler.sendEmptyMessageDelayed(FLAG, 2000);
+            }
+        }
+    };
+    private List<DetailsBean.ResultBean> imageList;
+    private DetailsAdapter detailsAdapter;
+    private LinearLayout llayout;
+
 
     @Nullable
     @Override
@@ -90,9 +126,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
             @Override
             public void onChangeCommodityid(int commodityid) {
                 Toast.makeText(getActivity(), "选择了商品" + commodityid, Toast.LENGTH_SHORT).show();
-                 //点击详情后  将搜索列表隐藏  展示详情
-                 xlvSearch.setVisibility(View.GONE);
-                 mWebView.setVisibility(View.VISIBLE);
+                //点击详情后  将搜索列表隐藏  展示详情
+                xlvSearch.setVisibility(View.GONE);
+                llayout.setVisibility(View.VISIBLE);
                 //点击进行商品详情网络请求方法
                 presenter.doGetShopXQIP(commodityid);
             }
@@ -175,6 +211,15 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
         //adapter
         searchAdapter = new SearchAdapter(getActivity(), searchList);
         xlvSearch.setAdapter(searchAdapter);
+
+        //详情
+        imageList = new ArrayList<>();
+        detailsAdapter = new DetailsAdapter(getActivity(), imageList);
+        //为imgvp加入
+        vp.setAdapter(detailsAdapter);
+        //延迟发送
+        handler.sendEmptyMessageDelayed(FLAG, 2000);
+
     }
 
     //网络判断初始化
@@ -229,6 +274,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
 
 
         mWebView = (WebView) view.findViewById(R.id.webView);
+        vp = (ViewPager) view.findViewById(R.id.vp);
+        llayout = (LinearLayout) view.findViewById(R.id.llayout);
     }
 
     //实现接口后实现的方法
@@ -270,12 +317,17 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
         if (o instanceof DetailsBean) {
             DetailsBean detailsBean = (DetailsBean) o;
             DetailsBean.ResultBean detailsBeanResult = detailsBean.getResult();
+
+            //加入详情轮播图
+            imageList.clear();
+            imageList.add(detailsBeanResult);
+            detailsAdapter.notifyDataSetChanged();
+
+
             String details = detailsBeanResult.getDetails();
             //使用webview展示
             //String detailsURL= "http://172.17.8.100/small/commodity/v1/findCommodityByKeyword?page=1&count=10&keyword="+commodityid;
             //mWebView.loadUrl(details);
-
-
             mWebView.setWebViewClient(new WebViewClient());
             //使用简单的loadData()方法总会导致乱码，有可能是Android API的Bug
             //webView.loadData(data, "text/html", "GBK");
@@ -313,7 +365,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, IVie
     public void onDestroy() {
         super.onDestroy();
         if (presenter != null) {
-            presenter = null;
+            presenter.datach();
         }
+
+        handler.removeCallbacksAndMessages(null);
     }
 }

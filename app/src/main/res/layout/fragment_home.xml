@@ -82,15 +82,32 @@
         android:visibility="gone"
         ></com.jcodecraeer.xrecyclerview.XRecyclerView>
     
-    //详情展示  默认隐藏
-    <WebView
-        android:id="@+id/webView"
+    //详情展示  默认隐藏android:visibility="gone"
+    <LinearLayout
+        android:id="@+id/llayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:visibility="gone"
         >
 
-    </WebView>
+        //使用Handler+ViewPager实现轮播
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+        </android.support.v4.view.ViewPager>
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </WebView>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>
