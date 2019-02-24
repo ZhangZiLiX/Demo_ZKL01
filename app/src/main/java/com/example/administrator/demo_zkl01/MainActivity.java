@@ -15,6 +15,7 @@ import com.example.administrator.demo_zkl01.startfragmentpage.mepage.FragmentMe;
 import com.example.administrator.demo_zkl01.startfragmentpage.circlepage.FragmentCircle;
 import com.example.administrator.demo_zkl01.startfragmentpage.billpage.FragmentBill;
 import com.example.administrator.demo_zkl01.utils.BaseActionBar;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,30 @@ public class MainActivity extends BaseActionBar {
         initListAndFragment();
         //vp设置
         setViewPagerFragment();
+        //侧滑设置
+        initSlidingMenu();
+
+    }
+
+    //侧滑设置
+    private void initSlidingMenu() {
+        SlidingMenu menu = new SlidingMenu(this);
+
+        //设置侧滑方法
+        menu.setMode(SlidingMenu.LEFT);
+        //设置触摸屏幕的模式
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        //设置华东菜单视图的宽度
+        menu.setBehindOffsetRes(R.dimen.cardview_default_radius);
+        //设置渐入渐出效果的值
+        menu.setFadeDegree(0.35f);
+
+        //把菜单添加进所有的Activity中  可选值SLIDING_CONTENT 会导致Activity界面混乱  ,SLIDING_WINDOW
+        menu.attachToActivity(this,SlidingMenu.SLIDING_WINDOW);
+        //设置滑动后剩余部分
+        menu.setBehindOffset(150);
+        //为侧滑菜单设置布局
+        menu.setMenu(R.layout.slidingmenu);
     }
 
 
